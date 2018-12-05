@@ -1,18 +1,3 @@
-  // ==UserScript==
-  // @name         data query
-  // @namespace    http://tampermonkey.net/
-  // @version      0.1
-  // @description  try to take over the world!
-  // @author       You
-  // @match        https://sleepmattress.com/*
-  // @match        https://www.alpha_sleep.com/*
-  // @grant        GM_setValue
-  // @grant        GM_getValue
-  // @grant        GM_deleteValue
-  // @grant        GM_listValues
-  // ==/UserScript==
-
-  (function() {
     if(GM_getValue("industry_time") == ".5"    ){
   console.deisty = function(a){
 
@@ -31,7 +16,7 @@
           {
             var deisty_site_check = true // checks if we are at the right site
             var deisty_pillow = GM_getValue("pharma_pillow_GM")
-            var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM and  11:00 AM and at  12:00 AM was it sucessful at 9:55 AM from sleepmattress" // the user phrase deisty has to interpret
+            var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM on  11:00 AM was it sucessful at 9:55 AM from sleepmattress" // the user phrase deisty has to interpret
             var deisty_sites = [] // array of sites if thats what user wants
             var deisty_sites_description = [] // values contining informaation about where deisty is in evaluating the script
             var deisty_counter = 0 // how many times deisty has to loop on a website to make it http compliant
@@ -41,10 +26,13 @@
             var deisty_sites_description_holder // when i am modifying the deisty site descirpion, this is a holder because I can noot directly modify the value in GM
           
             //determining time zone
-            var deisty_time_match_at = [new RegExp(/at +?(|\d)\d:\d\d +?(A|P)M(( +?and +?(|at) +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // what time  im looking at
+            var deisty_time_format = [new RegExp(/(|\d)\d:\d\d +?(A|P)M/)]
+            var deisty_time_match_at = [new RegExp(/(on|at) +?(|\d)\d:\d\d +?(A|P)M(( +?(and|on)( +?|)(| +?|at|on)? +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // what time  im looking at
             var deisty_time_match_at_result = []
-            var deisty_time_match_sucessful = [new RegExp(/sucess(ful)? +?at +?(|\d)\d:\d\d +?(A|P)M/gi)] // was it good at that time
+            var deisty_time_match_sucessful = [new RegExp(/suces(sful) +?(on|at) +?(|\d)\d:\d\d +?(A|P)M(( +?(and|on)( +?|)(| +?|at|on)? +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // was it good at that time
             var deisty_time_match_sucessful_result = []
+                //deisty time sucessful
+                var deisty_time_match_sucessful_counter //deisty_ii handles the time events where deisty needs to se if the were sucessful if occupied at that point
           }
 
           // functions
@@ -210,16 +198,44 @@
                   console.group("determining time zone")
                   console.deisty("so you are interested in the history of something ")
                   console.deisty("how far back?")
-                  if(deisty_user_pharse.match(deisty_time_match_at[0]).index != -1  ){
-                        // console.deisty("from that time huh  " + deisty_user_pharse.match(deisty_time_match_at[0])[0].split("at")[1])
-                        console.log(deisty_user_pharse.match(deisty_time_match_at[0])) 
-                        console.deisty_data(console.log(deisty_user_pharse.match(deisty_time_match_at[0])))
-                        if(deisty_user_pharse.match(deisty_time_match_sucessful[0]).index != -1  ){
-                            console.deisty_data(deisty_user_pharse.match(deisty_time_match_sucessful[0]))
-                        } 
+                  try{
+                      if(deisty_user_pharse.match(deisty_time_match_at[0]).index != -1  ){
+                            console.log(deisty_user_pharse.match(deisty_time_match_at[0])[0])
+                            deisty_time_match_at_result.push(deisty_user_pharse.match(deisty_time_match_at[0])[0])
+                            console.log("deisty_time_match_at_result", deisty_time_match_at_result) 
+                            if(deisty_user_pharse.match(deisty_time_match_sucessful[0]).index != -1  ){
+                                console.group("deisty time sucessful")
+                                console.log(deisty_user_pharse.match(deisty_time_match_sucessful[0])[0])
+                                deisty_time_match_sucessful_result.push(deisty_user_pharse.match(deisty_time_match_sucessful[0])[0])
+                                console.log("deisty_time_match_sucessful_result",deisty_time_match_sucessful_result)
+                                for(var deisty_ii in deisty_time_match_sucessful_result){
+                                    // deisty_ii handles the time events where deisty needs to se if the were sucessful if occupied at that point
+                                    deisty_time_match_sucessful_counter = deisty_time_match_sucessful_result[deisty_ii]
+                                    console.log(deisty_time_match_sucessful_counter.match(deisty_time_format[0])) 
+                                    deisty_time_match_sucessful_counter = deisty_time_match_sucessful_counter.match(deisty_time_format[0])
+                                    deisty_time_match_sucessful_result[deisty_ii] = deisty_time_match_sucessful_counter[0]
+                                }
+                                console.deisty("so was it good or bad to consider from these times")
+                                console.log(deisty_time_match_sucessful_result)
+                                console.groupEnd()
+                            } 
+                      }
                   }
+                  catch(e){
+                      throw("error, I dont understanding what the user wants concerning time ")
+                  }                  
                   console.groupEnd()
               }
+
+
+
+
+
+
+
+
+
+
               if(deisty_user_pharse.match("bed").index != -1){
                       console.deisty("so you are interested in beds ill pull up the list")
                       deisty_pillow = GM_getValue("pharma_pillow_GM")     // pillow we have to work with
@@ -235,5 +251,3 @@
           
 
     }
-
-  })();
