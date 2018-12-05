@@ -13,7 +13,9 @@
   // ==/UserScript==
 
   (function() {
+    if(GM_getValue("industry_time") == ".5"    ){
   console.deisty = function(a){
+
     console.log("DEISTY:%c " + a,"background:#00FF7F")
   }
 
@@ -29,7 +31,7 @@
           {
             var deisty_site_check = true // checks if we are at the right site
             var deisty_pillow = GM_getValue("pharma_pillow_GM")
-            var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM from sleepmattress" // the user phrase deisty has to interpret
+            var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM and  11:00 AM and at  12:00 AM was it sucessful at 9:55 AM from sleepmattress" // the user phrase deisty has to interpret
             var deisty_sites = [] // array of sites if thats what user wants
             var deisty_sites_description = [] // values contining informaation about where deisty is in evaluating the script
             var deisty_counter = 0 // how many times deisty has to loop on a website to make it http compliant
@@ -37,6 +39,12 @@
             // deisty correct format site handler
             var deisty_current_site
             var deisty_sites_description_holder // when i am modifying the deisty site descirpion, this is a holder because I can noot directly modify the value in GM
+          
+            //determining time zone
+            var deisty_time_match_at = [new RegExp(/at +?(|\d)\d:\d\d +?(A|P)M(( +?and +?(|at) +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // what time  im looking at
+            var deisty_time_match_at_result = []
+            var deisty_time_match_sucessful = [new RegExp(/sucess(ful)? +?at +?(|\d)\d:\d\d +?(A|P)M/gi)] // was it good at that time
+            var deisty_time_match_sucessful_result = []
           }
 
           // functions
@@ -161,7 +169,6 @@
                             console.log(GM_getValue("deisty_sites_description"))
                         }
                         else{
-                            // window.location.assign(deisty_sites[deisty_i])
                             // you should try to do everything till after deisty has all the needed infromation from the user string , log this instead
                             deisty_sites_description[deisty_i].at_correct_site = false
                             deisty_sites_description_holder = GM_getValue("deisty_sites_description")
@@ -203,9 +210,13 @@
                   console.group("determining time zone")
                   console.deisty("so you are interested in the history of something ")
                   console.deisty("how far back?")
-                  if(deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i).index != -1  ){
-                        console.deisty("from that time huh  " + deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i)[0]) 
-                        console.deisty_data(console.log(deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i)))
+                  if(deisty_user_pharse.match(deisty_time_match_at[0]).index != -1  ){
+                        // console.deisty("from that time huh  " + deisty_user_pharse.match(deisty_time_match_at[0])[0].split("at")[1])
+                        console.log(deisty_user_pharse.match(deisty_time_match_at[0])) 
+                        console.deisty_data(console.log(deisty_user_pharse.match(deisty_time_match_at[0])))
+                        if(deisty_user_pharse.match(deisty_time_match_sucessful[0]).index != -1  ){
+                            console.deisty_data(deisty_user_pharse.match(deisty_time_match_sucessful[0]))
+                        } 
                   }
                   console.groupEnd()
               }
@@ -224,6 +235,5 @@
           
 
     }
-
 
   })();
