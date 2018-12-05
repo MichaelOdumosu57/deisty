@@ -13,9 +13,6 @@
   // ==/UserScript==
 
   (function() {
-      'use strict';
-
-
   console.deisty = function(a){
     console.log("DEISTY:%c " + a,"background:#00FF7F")
   }
@@ -31,7 +28,7 @@
           // data
           {
             var deisty_site_check = true // checks if we are at the right site
-            var deisty_pillow
+            var deisty_pillow = GM_getValue("pharma_pillow_GM")
             var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM from sleepmattress" // the user phrase deisty has to interpret
             var deisty_sites = [] // array of sites if thats what user wants
             var deisty_sites_description = [] // values contining informaation about where deisty is in evaluating the script
@@ -155,7 +152,8 @@
                             console.deisty("ok so we are on the same website I assume that deisty_sites gave me the corret website format ")
                             
                             console.log(GM_getValue("deisty_sites_description"))
-                            deisty_sites_description[deisty_i].looking = true
+                            deisty_sites_description[deisty_i].looking = false
+                            deisty_sites_description[deisty_i].at_correct_site = true
                             console.log(deisty_sites_description[deisty_i])
                             deisty_sites_description_holder = GM_getValue("deisty_sites_description")
                             deisty_sites_description_holder[deisty_i] = deisty_sites_description[deisty_i]
@@ -163,11 +161,18 @@
                             console.log(GM_getValue("deisty_sites_description"))
                         }
                         else{
-                            window.location.assign(deisty_sites[deisty_i])
+                            // window.location.assign(deisty_sites[deisty_i])
+                            // you should try to do everything till after deisty has all the needed infromation from the user string , log this instead
+                            deisty_sites_description[deisty_i].at_correct_site = false
+                            deisty_sites_description_holder = GM_getValue("deisty_sites_description")
+                            deisty_sites_description_holder[deisty_i] = deisty_sites_description[deisty_i]
+                            GM_setValue("deisty_sites_description",deisty_sites_description_holder)
+                            console.log(GM_getValue("deisty_sites_description"))                            
+
                         }
                     if(window.location.href.indexOf(deisty_current_site) != -1){
                         // console.deisty(alert("so this is the site I am looking at",window.location.href))
-                        consle.deisty(("so this is the site I am looking at",window.location.href))
+                        console.deisty(("so this is the site I am looking at",window.location.href))
                     }
                     console.groupEnd()
                       
@@ -199,9 +204,8 @@
                   console.deisty("so you are interested in the history of something ")
                   console.deisty("how far back?")
                   if(deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i).index != -1  ){
-                        console.deisty("from that time huh")
-                        console.deisty(deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i))
-                        console.deisty_data(deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i))
+                        console.deisty("from that time huh  " + deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i)[0]) 
+                        console.deisty_data(console.log(deisty_user_pharse.match(/\d?\d:\d\d +?(A|P)M/i)))
                   }
                   console.groupEnd()
               }
@@ -216,7 +220,10 @@
 
 
 
-
+          alpha_sleep
           
+
+    }
+
 
   })();
