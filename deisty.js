@@ -1,4 +1,3 @@
-{
     if(GM_getValue("industry_time") == ".5"    ){
   console.deisty = function(a){
 
@@ -57,14 +56,16 @@
             var deisty_time_number// the number of the rate        
 
             // getting to the right page
-            var deisty_dynamic 
-            if(GM_getValue("deisty_dynamic") == undefined){ 
-                GM_setValue("deisty_dynamic",false)
-                deisty_dynamic  = false 
-            }   
-            else{
-                deisty_dynamic  = GM_getValue("deisty_dynamic") 
-            }
+            var deisty_window_location_href = window.location.href // deals with a bug in this section hopefully
+                // site movement 
+                var deisty_dynamic 
+                if(GM_getValue("deisty_dynamic") == undefined){ 
+                    GM_setValue("deisty_dynamic",false)
+                    deisty_dynamic  = false 
+                }   
+                else{
+                    deisty_dynamic  = GM_getValue("deisty_dynamic") 
+                }
             // tells us that the script is in an active phase and any activities related to the understanding of the user query should be silenced 
             var deisty_requirements
             if(GM_getValue("deisty_requirements") != undefined){ 
@@ -128,7 +129,7 @@
 
               }              
           
-          // requests regex handler
+          // understanding user query
           if(!deisty_dynamic){
               console.log(deisty_user_pharse)
 
@@ -146,6 +147,7 @@
                   if(deisty_user_pharse.split("from")[1] != undefined){
                       console.deisty("there are several cases here but I will assme there is only one site ")
                       var deisty_site_i = deisty_user_pharse.split("from")[1]  // to see if the url parameters are set
+                      var deisty_site_i_at_correct_site_keyword = deisty_user_pharse.split("from")[1].split(" ").join("") // this code block will change as more websites are to be considered 
 
 
 
@@ -168,7 +170,8 @@
                       else{
                           deisty_sites.push(deisty_site_i)
                           deisty_sites_description.push({
-                                                            "looking":false
+                                                            "looking":false,
+                                                            "at_correct_site_keyword":deisty_site_i_at_correct_site_keyword
                                                                     })
                           console.deisty("the sites I have so far")
                           console.deisty_data(deisty_sites)
@@ -372,17 +375,60 @@
               }
 
           }
-          // this section handles the desires understanding of the user
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+
+
+
+
+
+          // deisty dynamic_href
+
+          // changes required at end of coding
+          // GM_setValue("deisty_sites_description",deisty_sites_description)
 
           console.group("getting to the right page")
-              console.deisty("so this is what I am supposed to ")
+              console.deisty("so this is what I am supposed to do ")
               console.info(deisty_requirements)
               console.deisty("first lets activate dynamic mode ")
-              deisty_dynamic = true
-              GM_setValue("deisty_dynamic",deisty_dynamic)
-              console.deisty("am I at the right site")
-              console.log(deisty_sites[deisty_site_url_counter])
-              console.log(deisty_sites_description[deisty_site_url_counter])
+              console.group("site movement")
+                  console.group("GM_change: deisty_dynamic")
+                      deisty_dynamic = true
+                      GM_setValue("deisty_dynamic",deisty_dynamic)
+                      console.log(deisty_dynamic)
+                      console.log(GM_getValue("deisty_dynamic"))
+                  console.groupEnd()  
+                  console.deisty("am I at the right site")
+                  console.log(deisty_sites[deisty_site_url_counter])
+                  console.log(deisty_sites_description[deisty_site_url_counter].at_correct_site)
+                  if(deisty_sites_description[deisty_site_url_counter].at_correct_site == false  || deisty_window_location_href.indexOf(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword) == -1  ){
+                      console.group("GM_change: deisty_sites_description")
+                          deisty_sites_description[deisty_site_url_counter].at_correct_site = true
+                          GM_setValue("deisty_sites_description",deisty_sites_description)
+                          console.log(deisty_sites_description)
+                          console.log(GM_getValue("deisty_sites_description"))
+                          console.log(deisty_window_location_href.indexOf(      deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword                ))
+                          console.log(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword)
+                          console.log(deisty_window_location_href)                        
+                      console.groupEnd()                                                               
+                      window.location.assign(deisty_sites[deisty_site_url_counter])  
+                  }
+                  else{ 
+                  }
+
+              console.groupEnd()
 
 
 
@@ -393,20 +439,22 @@
               
 
           console.groupEnd()    
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////6/////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          //  be very careful any assignment from GM MUST BE REASSIGNED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+          //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+
 
 
 
@@ -414,3 +462,4 @@
           
 
     }
+
