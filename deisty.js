@@ -1,3 +1,4 @@
+{
     if(GM_getValue("industry_time") == ".5"    ){
   console.deisty = function(a){
 
@@ -16,8 +17,8 @@
           {
             var deisty_site_check = true // checks if we are at the right site
             var deisty_pillow = GM_getValue("pharma_pillow_GM")
-            var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM on  11:00 AM was it sucessful at 9:55 AM from sleepmattress" // the user phrase deisty has to interpret
-            var deisty_sites = [] // array of sites if thats what user wants
+            var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM on  11:00 AM was it sucessful at 9:55 AM up to 1 year from sleepmattress" // the user phrase deisty has to interpret
+            var deisty_sites = [] // array of sites if thats what user want
             var deisty_sites_description = [] // values contining informaation about where deisty is in evaluating the script
             var deisty_counter = 0 // how many times deisty has to loop on a website to make it http compliant
             
@@ -26,13 +27,19 @@
             var deisty_sites_description_holder // when i am modifying the deisty site descirpion, this is a holder because I can noot directly modify the value in GM
           
             //determining time zone
-            var deisty_time_format = [new RegExp(/(|\d)\d:\d\d +?(A|P)M/)]
+            var deisty_time_format = [new RegExp(/(|\d)\d:\d\d +?(A|P)M/gi)]
             var deisty_time_match_at = [new RegExp(/(on|at) +?(|\d)\d:\d\d +?(A|P)M(( +?(and|on)( +?|)(| +?|at|on)? +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // what time  im looking at
             var deisty_time_match_at_result = []
             var deisty_time_match_sucessful = [new RegExp(/suces(sful) +?(on|at) +?(|\d)\d:\d\d +?(A|P)M(( +?(and|on)( +?|)(| +?|at|on)? +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // was it good at that time
             var deisty_time_match_sucessful_result = []
+            var deisty_time_match_at_counter //deisty_iii handles the start points for the times
                 //deisty time sucessful
                 var deisty_time_match_sucessful_counter //deisty_ii handles the time events where deisty needs to se if the were sucessful if occupied at that point
+          
+            // for what days 
+            var deisty_history_available = [new RegExp(/ +?up +?to +?/)]  // this tells up how long ago  we should be looking if not availble throw and error 
+            var deisty_history_format = [new RegExp(/ +?up +?to +?\d+ +?(years?|months?|weeks?|days?|infinity|as far back +?((as) +?(you) +?(can))?)/i)] // help deisty understand how far back we need to go
+            var deisty_time_rate // time time zone the user is requesting
           }
 
           // functions
@@ -215,13 +222,53 @@
                                     deisty_time_match_sucessful_counter = deisty_time_match_sucessful_counter.match(deisty_time_format[0])
                                     deisty_time_match_sucessful_result[deisty_ii] = deisty_time_match_sucessful_counter[0]
                                 }
-                                console.deisty("so was it good or bad to consider from these times")
+                                console.deisty("so was it good or bad to consider from these times is your question")
                                 console.log(deisty_time_match_sucessful_result)
+                                console.log(deisty_time_match_sucessful_result[deisty_ii])
+                                console.groupEnd()
+                                console.deisty("Seems like there is no other factors to be set concerning time so I am group to tokenize these start points")
+                                for(var deisty_iii in deisty_time_match_at_result){
+                                    // deisty_iii handles the start points for the times
+                                    deisty_time_match_at_counter = deisty_time_match_at_result[deisty_iii]
+                                    console.log(deisty_time_match_at_counter.match(deisty_time_format[0]))
+                                    deisty_time_match_at_result[deisty_iii] = deisty_time_match_at_counter.match(deisty_time_format[0])
+                                }
+                                console.deisty("so I am seeing if these values were higher then the sucessful values I understand")
+                                console.log(deisty_time_match_at_result)
+                                console.group("for what days")
+                                if(deisty_user_pharse.match(deisty_history_available[0])[0] != null){
+                                    console.log(deisty_user_pharse.match(deisty_history_format[0]))
+                                    console.log(deisty_user_pharse)
+                                    console.log(deisty_history_format[0])
+                                    console.log(deisty_user_pharse.match(deisty_history_format[0])[0])
+                                    console.log(deisty_user_pharse.match(deisty_history_format[0])[1])
+                                    deisty_time_rate = deisty_user_pharse.match(deisty_history_format[0])[1]
+                                    
+                                    
+                                      if(deisty_time_rate.match(/years?/i)){ 
+                                            console.log("year")
+                                        }
+                                      if(deisty_time_rate.match(/months?/i)){
+                                            console.log("month")
+                                        }
+                                      if(deisty_time_rate.match(/weeks?/i)){
+                                            console.log("month")
+                                        }
+                                      if(deisty_time_rate.match(/days?/i)){
+                                            console.log("month")
+                                        }          
+                                      if(deisty_time_rate.match(/as|infinity/i)){
+                                        console.log("infinity")
+                                        }                                                                                                                            
+                               
+                                    
+                                }
                                 console.groupEnd()
                             } 
                       }
                   }
                   catch(e){
+                      console.log(e)
                       throw("error, I dont understanding what the user wants concerning time ")
                   }                  
                   console.groupEnd()
