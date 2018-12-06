@@ -40,6 +40,7 @@
             var deisty_history_available = [new RegExp(/ +?up +?to +?/)]  // this tells up how long ago  we should be looking if not availble throw and error 
             var deisty_history_format = [new RegExp(/ +?up +?to +?\d+ +?(years?|months?|weeks?|days?|infinity|as far back +?((as) +?(you) +?(can))?)/i)] // help deisty understand how far back we need to go
             var deisty_time_rate // time time zone the user is requesting
+            var deisty_time_number// the number of the rate 
           }
 
           // functions
@@ -243,6 +244,7 @@
                                     console.log(deisty_user_pharse.match(deisty_history_format[0])[0])
                                     console.log(deisty_user_pharse.match(deisty_history_format[0])[1])
                                     deisty_time_rate = deisty_user_pharse.match(deisty_history_format[0])[1]
+                                    deisty_time_number =  deisty_user_pharse.match(deisty_history_format[0])[0].match(/\d+/)
                                     
                                     
                                       if(deisty_time_rate.match(/years?/i)){ 
