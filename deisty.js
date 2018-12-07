@@ -18,27 +18,27 @@
             var deisty_pillow = GM_getValue("pharma_pillow_GM")
             var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM on  11:00 AM was it sucessful at 9:55 AM and 9:30 AM up to 1 year from sleepmattress" // the user phrase deisty has to interpret
             var deisty_sites = [] // array of sites if thats what user want
-            if(GM_getValue("deisty_sites") != undefined){ 
+            if(GM_getValue("deisty_sites") != undefined){
                 deisty_sites  = GM_getValue("deisty_sites")
-            }               
+            }
             var deisty_sites_description = [] // values contining informaation about where deisty is in evaluating the script
-            if(GM_getValue("deisty_sites_description") != undefined){ 
+            if(GM_getValue("deisty_sites_description") != undefined){
                 deisty_sites_description  = GM_getValue("deisty_sites_description")
-            }               
+            }
             var deisty_site_url_counter;  //the amount of diffenet webistes, with this number as refence, if the deisty_sites_description[index].at_coorect_sjte equals false while looking, deisty will make sure to navigate to the proper site
-            if(GM_getValue("deisty_site_url_counter") == undefined){ 
+            if(GM_getValue("deisty_site_url_counter") == undefined){
                 GM_setValue("deisty_site_url_counter",0)
-                deisty_site_url_counter  = 0 
-            }   
+                deisty_site_url_counter  = 0
+            }
             else{
-                deisty_site_url_counter  = GM_getValue("deisty_site_url_counter") 
-            }            
+                deisty_site_url_counter  = GM_getValue("deisty_site_url_counter")
+            }
             var deisty_counter = 0 // how many times deisty has to loop on a website to make it http compliant
-            
+
             // deisty correct format site handler
             var deisty_current_site
             var deisty_sites_description_holder // when i am modifying the deisty site descirpion, this is a holder because I can noot directly modify the value in GM
-          
+
             //determining time zone
             var deisty_time_format = [new RegExp(/(|\d)\d:\d\d +?(A|P)M/gi)]
             var deisty_time_match_at = [new RegExp(/(on|at) +?(|\d)\d:\d\d +?(A|P)M(( +?(and|on)( +?|)(| +?|at|on)? +?(|\d)\d:\d\d +?(A|P)M)+)?/gi)] // what time  im looking at
@@ -48,40 +48,42 @@
             var deisty_time_match_at_counter //deisty_iii handles the start points for the times
                 //deisty time sucessful
                 var deisty_time_match_sucessful_counter //deisty_ii handles the time events where deisty needs to se if the were sucessful if occupied at that point
-          
-            // for what days 
-            var deisty_history_available = [new RegExp(/ +?up +?to +?/)]  // this tells up how long ago  we should be looking if not availble throw and error 
+
+            // for what days
+            var deisty_history_available = [new RegExp(/ +?up +?to +?/)]  // this tells up how long ago  we should be looking if not availble throw and error
             var deisty_history_format = [new RegExp(/ +?up +?to +?\d+ +?(years?|months?|weeks?|days?|infinity|as far back +?((as) +?(you) +?(can))?)/i)] // help deisty understand how far back we need to go
             var deisty_time_rate // time time zone the user is requesting
-            var deisty_time_number// the number of the rate        
+            var deisty_time_number// the number of the rate
 
             // getting to the right page
             var deisty_window_location_href = window.location.href // deals with a bug in this section hopefully
-                // site movement 
-                var deisty_dynamic 
-                if(GM_getValue("deisty_dynamic") == undefined){ 
+                // site movement
+                var deisty_dynamic
+                if(GM_getValue("deisty_dynamic") == undefined){
                     GM_setValue("deisty_dynamic",false)
-                    deisty_dynamic  = false 
-                }   
-                else{
-                    deisty_dynamic  = GM_getValue("deisty_dynamic") 
+                    deisty_dynamic  = false
                 }
-            // tells us that the script is in an active phase and any activities related to the understanding of the user query should be silenced 
+                else{
+                    deisty_dynamic  = GM_getValue("deisty_dynamic")
+                }
+            // tells us that the script is in an active phase and any activities related to the understanding of the user query should be silenced
             var deisty_requirements
-            if(GM_getValue("deisty_requirements") != undefined){ 
+            if(GM_getValue("deisty_requirements") != undefined){
                 deisty_requirements  = GM_getValue("deisty_requirements")
-            }   
-            // what data is deisty ultimately reuqired to collect or what deisty is supposed to do for each specific relative site firm deisty sites in its index 
+            }
+            // what data is deisty ultimately reuqired to collect or what deisty is supposed to do for each specific relative site firm deisty sites in its index
             // deisty dynamaic must be set to true here, the declaration cannot come from here if the  flag is false
-           
+
                 //DEISTY SITE SEARCHER !!!!
-                var deisty_tags = [] // huge array, dealing with subparrents tags, helping deisty find the website part needed to access and retireve data      
+                var deisty_tags = [] // huge array, dealing with subparrents tags, helping deisty find the website part needed to access and retireve data
+                    // searching input for pillow
+                    var deisty_tag_properties = [] // holds needed info for each tag in question to find if its the right tag for deisty to perform some action to acess data 
            }
 
           // functions
-          
+
               function deisty_http_tokenization(deisty_a){
-                  
+
                   console.group("deisty_http_tokenization")
                   console.deisty_data(deisty_a)
                   if(deisty_a.match(/.https?\b/g) != null){
@@ -114,21 +116,68 @@
 
 
 
-              function deisty_SITE_SEARCHER(){
+              function deisty_SITE_SEARCHER(deisty_b,deisty_c,deisty_d){
                    //the most powerful function in this program, this function seraches a webpage through it tags and find the answers where it can locate the data
                    // actions are taken here if the script needs to get closer to achieveing its goal
-                   // after it sees a pattern its logs how it gets there, 
+                   // after it sees a pattern its logs how it gets there,
                    // and if the pattern falls off it requests the intital handler to search the proper path to the data again
                    console.group("%cDEISTY SITE SEARCHER !!!!","color:yellow; background-color:red; font:bold; font-size : 2em")
-                       console.deisty("If you CPU gets crushed your problem is most likely here")
-                       for (var deisty_iiii in document.querySelectorAll("body > *")){
-                            console.log()
-                       }
+                      console.deisty("If you CPU gets crushed your problem is most likely here")
+                      console.deisty("so I am looking for  "+ deisty_b)
+                      for (var deisty_iiii in document.querySelectorAll("body " + deisty_b)){
+                         if(typeof(document.querySelectorAll("body " + deisty_b)[deisty_iiii]) == "number"){
+                             break;
+                         }
+                         deisty_tags.push(document.querySelectorAll("body " + deisty_b)[deisty_iiii])
+                      } 
+                      console.log(deisty_tags)
+                      console.log(document.querySelectorAll("body " + deisty_b))
+                      console.deisty("some sites are dynamic, so I i start to find that the information required requies a full download capablitiy of the site I might slow down or refuse the user query alright")
+
+                      if(deisty_b == "INPUT"){
+                          if(deisty_c == "LIST"){
+                              console.deisty(" I need to find a search bar where I can enter values from my lists or partner lists one by one,and hopefully I can get the href where I can access the items in the list theirselves without going to the home page")
+                              if (deisty_d == deisty_pillow){
+                                  console.group("searching input for pillow")
+                                  for (var deisty_iiiii in  deisty_tags) {
+                                      deisty_tag_properties = []
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].id)
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].className )                                      
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].classList )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerText )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerHTML )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].placeholder )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].contentEditable )
+                                      for(var deisty_6_i in deisty_tag_properties){
+                                          if(typeof(deisty_tag_properties[deisty_6_i]) == "string"){
+                                              if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null){
+                                                  console.deisty("lets try putting a pillow here ")  
+                                                  deisty_tags[deisty_iiiii].value = deisty_pillow[0] ;
+                                                  console.log([deisty_iiiii])
+                                                  console.log(deisty_tags[deisty_iiiii].value)
+                                                  console.log(document.querySelectorAll("body " + deisty_b))
+                                                  break
+                                              }
+
+                                          }
+                                          else{
+                                              console.deisty_data(typeof(deisty_tag_properties[deisty_6_i]))   
+                                          }      
+                                      }
+
+
+                                  }
+                                  console.groupEnd()
+                              }
+                          }   
+                      }
+
+
                    console.groupEnd()
 
 
-              }              
-          
+              }
+
           // understanding user query
           if(!deisty_dynamic){
               console.log(deisty_user_pharse)
@@ -147,14 +196,14 @@
                   if(deisty_user_pharse.split("from")[1] != undefined){
                       console.deisty("there are several cases here but I will assme there is only one site ")
                       var deisty_site_i = deisty_user_pharse.split("from")[1]  // to see if the url parameters are set
-                      var deisty_site_i_at_correct_site_keyword = deisty_user_pharse.split("from")[1].split(" ").join("") // this code block will change as more websites are to be considered 
+                      var deisty_site_i_at_correct_site_keyword = deisty_user_pharse.split("from")[1].split(" ").join("") // this code block will change as more websites are to be considered
 
 
 
 
                       while(deisty_site_i.match(/.https?:\b/g) == null && deisty_site_i.match(/\b.com?/g) == null && deisty_counter != 10){
-                          
-                      
+
+
 
 
                               console.deisty("i need to tokenize this site ")
@@ -189,7 +238,7 @@
                             throw(console.deisty("Well how am I gunna grab data if I don't know what site I am going to go to"))
                         }
                         console.groupEnd()
-                        
+
                   }
                   GM_getValue("deisty_sites") != deisty_sites ?  GM_setValue("deisty_sites",deisty_sites)  :null
                   GM_getValue("deisty_sites_description") == null ?  GM_setValue("deisty_sites_description",deisty_sites_description)  :null
@@ -202,7 +251,7 @@
                     console.log(deisty_sites[deisty_i])
                         if(window.location.href.indexOf(deisty_current_site) != -1){
                             console.deisty("ok so we are on the same website I assume that deisty_sites gave me the corret website format ")
-                            
+
                             console.log(GM_getValue("deisty_sites_description"))
                             deisty_sites_description[deisty_i].looking = false
                             deisty_sites_description[deisty_i].at_correct_site = true
@@ -218,7 +267,7 @@
                             deisty_sites_description_holder = GM_getValue("deisty_sites_description")
                             deisty_sites_description_holder[deisty_i] = deisty_sites_description[deisty_i]
                             GM_setValue("deisty_sites_description",deisty_sites_description_holder)
-                            console.log(GM_getValue("deisty_sites_description"))                            
+                            console.log(GM_getValue("deisty_sites_description"))
 
                         }
                     if(window.location.href.indexOf(deisty_current_site) != -1){
@@ -226,26 +275,30 @@
                         console.deisty(("so this is the site I am looking at",window.location.href))
                     }
                     console.groupEnd()
-                      
+
                   }
-                  
-                  
-                  
-                  
+
+
+
+
                   // buffer to handle multiple sites
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+                  //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
 
               }
-              
+
               if(deisty_user_pharse.match("history").index != -1  ){
                   console.group("determining time zone")
                   console.deisty("so you are interested in the history of something ")
@@ -254,7 +307,7 @@
                       if(deisty_user_pharse.match(deisty_time_match_at[0]).index != -1  ){
                             console.log(deisty_user_pharse.match(deisty_time_match_at[0])[0])
                             deisty_time_match_at_result.push(deisty_user_pharse.match(deisty_time_match_at[0])[0])
-                            console.log("deisty_time_match_at_result", deisty_time_match_at_result) 
+                            console.log("deisty_time_match_at_result", deisty_time_match_at_result)
                             if(deisty_user_pharse.match(deisty_time_match_sucessful[0]).index != -1  ){
                                 console.group("deisty time sucessful")
                                 console.log(deisty_user_pharse.match(deisty_time_match_sucessful[0]))
@@ -263,7 +316,7 @@
                                 for(var deisty_ii in deisty_time_match_sucessful_result){
                                     // deisty_ii handles the time events where deisty needs to se if the were sucessful if occupied at that point
                                     deisty_time_match_sucessful_counter = deisty_time_match_sucessful_result[deisty_ii]
-                                    console.log(deisty_time_match_sucessful_counter.match(deisty_time_format[0])) 
+                                    console.log(deisty_time_match_sucessful_counter.match(deisty_time_format[0]))
                                     deisty_time_match_sucessful_counter = deisty_time_match_sucessful_counter.match(deisty_time_format[0])
                                     deisty_time_match_sucessful_result[deisty_ii] = deisty_time_match_sucessful_counter
                                 }
@@ -290,11 +343,11 @@
                                     deisty_time_rate = deisty_user_pharse.match(deisty_history_format[0])[1]
                                     deisty_time_number =  deisty_user_pharse.match(deisty_history_format[0])[0].match(/\d+/)[0]
                                     console.log(deisty_time_number)
-                                    
-                                    
-                                    if(deisty_time_rate.match(/years?/i)){ 
+
+
+                                    if(deisty_time_rate.match(/years?/i)){
                                           console.log("year")
-                                          deisty_time_number = parseInt(deisty_time_number) * 365 
+                                          deisty_time_number = parseInt(deisty_time_number) * 365
                                       }
                                     if(deisty_time_rate.match(/months?/i)){
                                           console.log("month")
@@ -307,7 +360,7 @@
                                     if(deisty_time_rate.match(/days?/i)){
                                           console.log("days")
                                           deisty_time_number = parseInt(deisty_time_number) * 1
-                                      }          
+                                      }
                                     if(deisty_time_rate.match(/as|infinity/i)){
                                       console.log("infinity")
                                       deisty_time_rate = "infinity"
@@ -316,7 +369,7 @@
                                     console.deisty("This is how far I am going back then huh \n" +  deisty_time_number)
                                     console.deisty("Anything specific?")
 
-                                    
+
                                     if(deisty_user_pharse.match(/especi|specific(ally)?/)){
 
                                       // response code here
@@ -335,18 +388,18 @@
                                                         "past point" : deisty_time_match_sucessful_result
                                                       })
                                         // nothing should be set to GM until deisty understand everything it needs from the site, different from GM
-                                        // logging of the site theirselves 
-                                        GM_setValue("deisty_requirements",deisty_requirements)                                                      
-                                        console.groupEnd()                                          
+                                        // logging of the site theirselves
+                                        GM_setValue("deisty_requirements",deisty_requirements)
+                                        console.groupEnd()
                                     }
 
 
 
-                               
-                                    
+
+
                                 }
                                 console.groupEnd()
-                            } 
+                            }
                       }
                   }
                   catch(e){
@@ -354,7 +407,7 @@
                       console.error("error, I dont understanding what the user wants concerning time ")
                       console.deisty("I am a mean program so this is how I want things done")
                       throw("USER: I want the history of any bed at [as many times in hh:mm (12) hr format, also include and between things!]   was it sucessful at [as many times in hh:mm (12) hr format, also include and between things!] up to [how far you want me to go back in days ] from [one website]")
-                  }                  
+                  }
                   console.groupEnd()
               }
 
@@ -409,11 +462,12 @@
                       GM_setValue("deisty_dynamic",deisty_dynamic)
                       console.log(deisty_dynamic)
                       console.log(GM_getValue("deisty_dynamic"))
-                  console.groupEnd()  
+                  console.groupEnd()
                   console.deisty("am I at the right site")
                   console.log(deisty_sites[deisty_site_url_counter])
                   console.log(deisty_sites_description[deisty_site_url_counter].at_correct_site)
-                  if(deisty_sites_description[deisty_site_url_counter].at_correct_site == false  || deisty_window_location_href.indexOf(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword) == -1  ){
+                  // if there are problems with being on the right website, check this condiitional 
+                  if((deisty_sites_description[deisty_site_url_counter].at_correct_site == false  || deisty_window_location_href.indexOf(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword) == -1 ) && deisty_sites_description[deisty_site_url_counter].looking == false  ){
                       console.group("GM_change: deisty_sites_description")
                           deisty_sites_description[deisty_site_url_counter].at_correct_site = true
                           GM_setValue("deisty_sites_description",deisty_sites_description)
@@ -421,11 +475,12 @@
                           console.log(GM_getValue("deisty_sites_description"))
                           console.log(deisty_window_location_href.indexOf(      deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword                ))
                           console.log(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword)
-                          console.log(deisty_window_location_href)                        
-                      console.groupEnd()                                                               
-                      window.location.assign(deisty_sites[deisty_site_url_counter])  
+                          console.log(deisty_window_location_href)
+                      console.groupEnd()
+                      console.log(deisty_sites[deisty_site_url_counter])
+                      window.location.assign(deisty_sites[deisty_site_url_counter])
                   }
-                  else{ 
+                  else{
                   }
 
               console.groupEnd()
@@ -434,11 +489,19 @@
 
 
               console.deisty("so now how do I search on this site, is there a search bar where I can enter beds")
+              console.deisty("also I am looking at this site we will not be switching sites anymore ")
+              console.group("GM_change: deisty_sites_description")
+                  deisty_sites_description[deisty_site_url_counter].looking = true
+                  GM_setValue("deisty_sites_description",deisty_sites_description)
+                  console.log(deisty_sites_description)
+                  console.log(GM_getValue("deisty_sites_description"))                  
+              console.groupEnd()
 
-              deisty_SITE_SEARCHER()
-              
+              deisty_SITE_SEARCHER("INPUT","LIST",deisty_pillow)
 
-          console.groupEnd()    
+
+
+          console.groupEnd()
           //  be very careful any assignment from GM MUST BE REASSIGNED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
           //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
           //yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
@@ -459,7 +522,6 @@
 
 
           alpha_sleep
-          
+
 
     }
-
