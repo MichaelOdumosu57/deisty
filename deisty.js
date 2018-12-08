@@ -88,6 +88,10 @@
 
           // functions
 
+
+
+
+
               function deisty_http_tokenization(deisty_a){
 
                   console.group("deisty_http_tokenization")
@@ -177,35 +181,61 @@
                               console.group(deisty_b + " for " + deisty_c + " for pillow" )
                               console.log(deisty_d[deisty_pillow_counter])
 
-                                  for (var deisty_iiiii in  deisty_tags) {
+                                  for (var deisty_5_i in  deisty_tags) {
                                       deisty_tag_properties = []
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].id              )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].className       )                                      
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].classList       )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerText       )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerHTML       )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].placeholder     )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].contentEditable )
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].id              )
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].className       )                                      
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].classList       )
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].innerText       )
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].innerHTML       )
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].placeholder     )
+                                      deisty_tag_properties.push(deisty_tags[deisty_5_i].contentEditable )
                                       for(var deisty_6_i in deisty_tag_properties){
                                           if(typeof(deisty_tag_properties[deisty_6_i]) == "string"){
-                                              if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null){
+                                              if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null  &&   deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length <= 1       ){
+                                              // if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null         ){
                                                   console.deisty("lets try putting a pillow here ")  
-                                                  deisty_tags[deisty_iiiii].value = deisty_pillow[0];
-                                                  console.log([deisty_iiiii])
-                                                  console.log(deisty_tags[deisty_iiiii].value)
+                                                  deisty_tags[deisty_5_i].value = deisty_pillow[deisty_pillow_counter];
+                                                  console.log([deisty_5_i])
+                                                  console.log(deisty_tags[deisty_5_i].value)
                                                   console.log(document.querySelectorAll("body " + deisty_b))
-                                                  console.group("GM_change: deisty_tag_actions")
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0] = deisty_tags[deisty_iiiii]
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[0] = "grabbing_pillow_input_object"
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[1] = deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0].value = deisty_pillow[1]
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[1] = "setting_pillow_to_grabbing_pillow_input_object "
-                                                      console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step)
-                                                      console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description)
-                                                      alpha_sleep
-                                                      GM_setValue("deisty_tag_actions",deisty_tag_actions)
-                                                      console.log(deisty_tag_actions)
-                                                      console.log(GM_getValue("deisty_tag_actions"))
-                                                  console.groupEnd()                                                  
+                                                  console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length)
+                                                  if(GM_getValue("deisty_tag_actions")[deisty_site_url_counter].correct_webpage_action_step.length <= 1){
+                                                      console.group("GM_change: deisty_tag_actions")
+                                                          console.deisty("if we have memory problems remove step zero and configure accoridingly ")
+                                                          console.deisty_dev("when you remove step 0 change all instances of deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length >= 1  the 1 to 0")
+                                                          deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0] = deisty_tags[deisty_5_i]
+                                                          deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[0] = "grabbing_pillow_input_object"
+                                                          deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[1] = "call method a"
+                                                          deisty_tag_actions[deisty_site_url_counter].a = function() {deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0].value = deisty_pillow[deisty_pillow_counter]}                                                                                                                 
+                                                          deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[1] = "setting_pillow_to_grabbing_pillow_input_object "
+                                                          deisty_tag_actions[deisty_site_url_counter].trusted_actions.search_bar = deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step
+                                                          console.log(deisty_tag_actions[deisty_site_url_counter].a)
+                                                          GM_setValue("deisty_tag_actions",deisty_tag_actions)
+                                                          console.log(deisty_tag_actions)
+                                                          console.log(GM_getValue("deisty_tag_actions"))
+                                                      console.groupEnd()        
+                                                  }                                      
+                                                  console.deisty("hopefully I found where to input the pillow as a search ")   
+                                              }
+                                              else if(deisty_tag_properties[deisty_6_i].match(/b(u)?(t)?t(o)?n/gi)){  
+                                                  if( deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length >= 1   ){
+
+                                                      console.log(deisty_tag_actions[deisty_site_url_counter].a)
+                                                      deisty_tag_actions[deisty_site_url_counter].a()
+                                                      console.log(deisty_tags[0])
+
+                                                  }
+                                                  console.deisty("lets try clicking a button")
+                                                  console.deisty_dev("preserve required action memory here")
+                                                  console.log(deisty_tags[deisty_5_i])
+                                                  console.log(deisty_5_i)
+                                                  deisty_tags[deisty_5_i].click()
+
+
+                                                  console.log(deisty_tag_actions)
+                                                  console.log(GM_getValue("deisty_tag_actions")) 
+                                                  var alpha_sleep
                                                   break
                                               }
 
@@ -576,4 +606,3 @@
 
 
     }
-
