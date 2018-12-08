@@ -80,7 +80,11 @@
                 GM_getValue("deisty_tag_actions") != undefined  ? deisty_tag_actions = GM_getValue("deisty_tag_actions") :  GM_setValue("deisty_tag_actions",deisty_tag_actions)  // this helps deisty remember the steps it took to access data
                     // initializing action memery
                     var deisty_tag_properties = [] // holds needed info for each tag in question to find if its the right tag for deisty to perform some action to acess data 
+<<<<<<< HEAD
                         // NPUT for LIST for pillow
+=======
+                        // NPUT for LIST for pillow
+>>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
                         var deisty_pillow_counter = 0 // monitiors what pillow deisty is supposed to be looking at
                         GM_getValue("deisty_pillow_counter") != undefined  ? deisty_pillow_counter = GM_getValue("deisty_pillow_counter") :  GM_setValue("deisty_pillow_counter",deisty_pillow_counter)
 
@@ -178,6 +182,7 @@
                               console.deisty(" I need to find a search bar where I can enter values from my lists or partner lists one by one,and hopefully I can get the href where I can access the items in the list theirselves without going to the home page")
 
                               if (deisty_d == deisty_pillow){
+<<<<<<< HEAD
                               console.group(deisty_b + " for " + deisty_c + " for pillow" )
                               console.log(deisty_d[deisty_pillow_counter])
 
@@ -190,11 +195,26 @@
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].innerHTML       )
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].placeholder     )
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].contentEditable )
+=======
+                              console.group(deisty_b + " for " + deisty_c + " for pillow" )
+                              console.log(deisty_d[deisty_pillow_counter])
+
+                                  for (var deisty_iiiii in  deisty_tags) {
+                                      deisty_tag_properties = []
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].id              )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].className       )                                      
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].classList       )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerText       )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerHTML       )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].placeholder     )
+                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].contentEditable )
+>>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
                                       for(var deisty_6_i in deisty_tag_properties){
                                           if(typeof(deisty_tag_properties[deisty_6_i]) == "string"){
                                               if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null  &&   deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length <= 1       ){
                                               // if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null         ){
                                                   console.deisty("lets try putting a pillow here ")  
+<<<<<<< HEAD
                                                   deisty_tags[deisty_5_i].value = deisty_pillow[deisty_pillow_counter];
                                                   console.log([deisty_5_i])
                                                   console.log(deisty_tags[deisty_5_i].value)
@@ -236,6 +256,24 @@
                                                   console.log(deisty_tag_actions)
                                                   console.log(GM_getValue("deisty_tag_actions")) 
                                                   var alpha_sleep
+=======
+                                                  deisty_tags[deisty_iiiii].value = deisty_pillow[0];
+                                                  console.log([deisty_iiiii])
+                                                  console.log(deisty_tags[deisty_iiiii].value)
+                                                  console.log(document.querySelectorAll("body " + deisty_b))
+                                                  console.group("GM_change: deisty_tag_actions")
+                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0] = deisty_tags[deisty_iiiii]
+                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[0] = "grabbing_pillow_input_object"
+                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[1] = deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0].value = deisty_pillow[1]
+                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[1] = "setting_pillow_to_grabbing_pillow_input_object "
+                                                      console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step)
+                                                      console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description)
+                                                      var alpha_sleep
+                                                      GM_setValue("deisty_tag_actions",deisty_tag_actions)
+                                                      console.log(deisty_tag_actions)
+                                                      console.log(GM_getValue("deisty_tag_actions"))
+                                                  console.groupEnd()                                                  
+>>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
                                                   break
                                               }
 
@@ -606,3 +644,7 @@
 
 
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
