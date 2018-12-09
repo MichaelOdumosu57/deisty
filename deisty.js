@@ -1,19 +1,20 @@
     if(GM_getValue("industry_time") == ".5"    ){
-  console.deisty = function(a){
+        console.deisty = function(a){
 
-    console.log("DEISTY:%c " + a,"background:#00FF7F")
-  }
+          console.log("DEISTY:%c " + a,"background:#00FF7F")
+        }
 
-  console.deisty_data =  function(a){
-    console.warn("INFO: ",a)
-  }
+        console.deisty_data =  function(a){
+          console.warn("INFO: ",a)
+        }
 
-  console.deisty_dev = function(a){
-    console.warn("DEV:%c"+ a, "background: #D8BFD8")
-  }
+        console.deisty_dev = function(a){
+          console.warn("DEV:%c"+ a, "background: #D8BFD8")
+        }
 
           // data
           {
+
             var deisty_site_check = true // checks if we are at the right site
             var deisty_pillow = GM_getValue("pharma_pillow_GM")
             var deisty_user_pharse = "USER: I want the history of any bed at 10:30 AM on  11:00 AM was it sucessful at 9:55 AM and 9:30 AM up to 1 year from sleepmattress" // the user phrase deisty has to interpret
@@ -80,18 +81,57 @@
                 GM_getValue("deisty_tag_actions") != undefined  ? deisty_tag_actions = GM_getValue("deisty_tag_actions") :  GM_setValue("deisty_tag_actions",deisty_tag_actions)  // this helps deisty remember the steps it took to access data
                     // initializing action memery
                     var deisty_tag_properties = [] // holds needed info for each tag in question to find if its the right tag for deisty to perform some action to acess data 
-<<<<<<< HEAD
                         // NPUT for LIST for pillow
-=======
-                        // NPUT for LIST for pillow
->>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
                         var deisty_pillow_counter = 0 // monitiors what pillow deisty is supposed to be looking at
                         GM_getValue("deisty_pillow_counter") != undefined  ? deisty_pillow_counter = GM_getValue("deisty_pillow_counter") :  GM_setValue("deisty_pillow_counter",deisty_pillow_counter)
 
            }
 
+           // local strorage scope helping
+           {
+                deisty_scope_setting("deisty_tag_actions" , deisty_tag_actions) 
+                localStorage.setItem("deisty_site_url_counter" , deisty_site_url_counter)
+                localStorage.setItem("deisty_pillow" , deisty_pillow) 
+                localStorage.setItem("deisty_pillow_counter" , deisty_pillow_counter)
+                localStorage.setItem("deisty_dynamic",deisty_dynamic)             
+           }
+
           // functions
 
+
+
+            function deisty_scope_setting(deisty_e,deisty_f,deisty_g = true){
+                // helps keep track of dynamic storage GM and localStroage 
+                // helps to avoid scope problems assoicated with these external dynamaics
+                // next use of the vast server space to get the job done
+                // try only to use console log when using this because of the complex return statements
+                // returns everything in scope and storage incase the index 0 does not function as desired
+                if(deisty_g){
+                    GM_setValue(deisty_e,deisty_f)
+                    localStorage.setItem(deisty_e,JSON.stringify(deisty_f))
+                }
+                if(deisty_e != "deisty_pillow"  ){
+                    var deisty_h
+                    // preserve newlines, etc - use valid JSON
+                    deisty_h = localStorage.getItem(deisty_e).replace(/\\n/g, "\\n")  
+                                   .replace(/\\'/g, "\\'")
+                                   .replace(/\\"/g, '\\"')
+                                   .replace(/\\&/g, "\\&")
+                                   .replace(/\\r/g, "\\r")
+                                   .replace(/\\t/g, "\\t")
+                                   .replace(/\\b/g, "\\b")
+                                   .replace(/\\f/g, "\\f");
+                    // remove non-printable and other non-valid JSON chars
+                    deisty_h = deisty_h.replace(/[\u0000-\u0019]+/g,""); 
+                    var deisty_j = JSON.parse(deisty_h);  
+                }
+
+
+                return [deisty_f != undefined ?   deisty_f : localStorage.getItem(deisty_e) != undefined ? localStorage.getItem(deisty_e) :  GM_getValue(deisty_e),   
+                "deisty_f " ,  deisty_f,
+                "localstorage " , deisty_e == "deisty_pillow" ? localStorage.getItem(deisty_e).split(",") :  deisty_j , 
+                "GM_storage " , GM_getValue(deisty_e)]
+            }
 
 
 
@@ -139,13 +179,13 @@
                       console.deisty("If you CPU gets crushed your problem is most likely here")
                       console.deisty("so I am looking for  "+ deisty_b)
                       for (var deisty_iiii in document.querySelectorAll("body " + deisty_b)){
-                         if(typeof(document.querySelectorAll("body " + deisty_b)[deisty_iiii]) == "number"){
+                         if(typeof(document.querySelectorAll("body " + deisty_b.toLowerCase())[deisty_iiii]) == "number"){
                              break;
                          }
-                         deisty_tags.push(document.querySelectorAll("body " + deisty_b)[deisty_iiii])
+                         deisty_tags.push(document.querySelectorAll("body " + deisty_b.toLowerCase())[deisty_iiii])
                       } 
                       console.log(deisty_tags)
-                      console.log(document.querySelectorAll("body " + deisty_b))
+                      console.log(document.querySelectorAll("body " + deisty_b.toLowerCase()))
                       console.deisty("some sites are dynamic, so I i start to find that the information required requies a full download capablitiy of the site I might slow down or refuse the user query alright")
                       console.group("#initializing action memory")
                       console.deisty_dev("this is a very complex object acting as memory for the steps deisty is taking to access data, there are steps and desciptions of what happens in each step, these steps must line up with descriptions for proper debug, and once a pattern is found it will revert to trusted_actions to further determine how to collection future data, if check == 5, deisty can trust the steps listed in trusted_actions and revert there to collect data, else check is reset to zero until deisty finds a set of trusted steps to obtain data, also in trusted_actions, there should be a case handler trusted_actions is the most complex part of this object which require functions for proper managament for deisty to do its job handle with care, if there is a bug best to wipe it  ")                                            
@@ -164,14 +204,12 @@
                                                                   "data_gathering_action_description":[
 
                                                                                                       ],
-                                                                  "check":0,                                                                                                      
+                                                                  "check":0,                                                                                                   
                                                                   "trusted_actions":{
                                                                   
                                                                                     }                                                                                                                                                                                                  
-                                                                                                                   }
-                              GM_setValue("deisty_tag_actions",deisty_tag_actions)
-                              console.log(deisty_tag_actions)
-                              console.log(GM_getValue("deisty_tag_actions"))
+                                                                                                                   }                              
+                              console.log(deisty_scope_setting("deisty_tag_actions",deisty_tag_actions))
                           console.groupEnd()
                       }
                       else{
@@ -182,10 +220,8 @@
                               console.deisty(" I need to find a search bar where I can enter values from my lists or partner lists one by one,and hopefully I can get the href where I can access the items in the list theirselves without going to the home page")
 
                               if (deisty_d == deisty_pillow){
-<<<<<<< HEAD
                               console.group(deisty_b + " for " + deisty_c + " for pillow" )
                               console.log(deisty_d[deisty_pillow_counter])
-
                                   for (var deisty_5_i in  deisty_tags) {
                                       deisty_tag_properties = []
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].id              )
@@ -195,26 +231,11 @@
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].innerHTML       )
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].placeholder     )
                                       deisty_tag_properties.push(deisty_tags[deisty_5_i].contentEditable )
-=======
-                              console.group(deisty_b + " for " + deisty_c + " for pillow" )
-                              console.log(deisty_d[deisty_pillow_counter])
-
-                                  for (var deisty_iiiii in  deisty_tags) {
-                                      deisty_tag_properties = []
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].id              )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].className       )                                      
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].classList       )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerText       )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].innerHTML       )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].placeholder     )
-                                      deisty_tag_properties.push(deisty_tags[deisty_iiiii].contentEditable )
->>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
                                       for(var deisty_6_i in deisty_tag_properties){
                                           if(typeof(deisty_tag_properties[deisty_6_i]) == "string"){
                                               if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null  &&   deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length <= 1       ){
                                               // if(deisty_tag_properties[deisty_6_i].match(/look(up)?|search|symbol/gi) != null         ){
                                                   console.deisty("lets try putting a pillow here ")  
-<<<<<<< HEAD
                                                   deisty_tags[deisty_5_i].value = deisty_pillow[deisty_pillow_counter];
                                                   console.log([deisty_5_i])
                                                   console.log(deisty_tags[deisty_5_i].value)
@@ -224,25 +245,33 @@
                                                       console.group("GM_change: deisty_tag_actions")
                                                           console.deisty("if we have memory problems remove step zero and configure accoridingly ")
                                                           console.deisty_dev("when you remove step 0 change all instances of deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length >= 1  the 1 to 0")
-                                                          deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0] = deisty_tags[deisty_5_i]
+                                                          deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0] = "document.querySelectorAll('body  " +  deisty_tags[deisty_5_i].localName + "')[" + deisty_5_i + "].value"
                                                           deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[0] = "grabbing_pillow_input_object"
                                                           deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[1] = "call method a"
-                                                          deisty_tag_actions[deisty_site_url_counter].a = function() {deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0].value = deisty_pillow[deisty_pillow_counter]}                                                                                                                 
+                                                          // deisty_tag_actions[deisty_site_url_counter].a = function() {deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0].value = deisty_pillow[deisty_pillow_counter]}   
+
+
+                                                              deisty_scope_setting("deisty_tag_actions" , deisty_tag_actions)
+                                                              deisty_scope_setting("deisty_site_url_counter" , deisty_site_url_counter)                                                                    
+                                                              localStorage.setItem("deisty_pillow" , deisty_pillow)      
+                                                              deisty_scope_setting("deisty_pillow_counter" , deisty_pillow_counter)      
+
+                                                              deisty_tag_actions[deisty_site_url_counter].a =  'console.log(deisty_scope_setting("deisty_tag_actions",undefined,false)[4])      ;      console.log(deisty_scope_setting("deisty_site_url_counter",undefined,false)[4])             ;               console.log(deisty_scope_setting("deisty_pillow",undefined,false)[4])             ;            console.log(deisty_scope_setting("deisty_pillow_counter",undefined,false)[4]);      console.log(deisty_scope_setting("deisty_tag_actions",undefined,false)[4][deisty_scope_setting("deisty_site_url_counter",undefined,false)[4]].correct_webpage_action_step[0])           ; console.log(document.querySelectorAll("body   input"));       document.querySelectorAll("body   input")[0].value= deisty_scope_setting("deisty_pillow",undefined,false)[4][deisty_scope_setting("deisty_pillow_counter",undefined,false)[4]]; '
                                                           deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[1] = "setting_pillow_to_grabbing_pillow_input_object "
                                                           deisty_tag_actions[deisty_site_url_counter].trusted_actions.search_bar = deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step
                                                           console.log(deisty_tag_actions[deisty_site_url_counter].a)
-                                                          GM_setValue("deisty_tag_actions",deisty_tag_actions)
-                                                          console.log(deisty_tag_actions)
-                                                          console.log(GM_getValue("deisty_tag_actions"))
+                                                          console.log(deisty_scope_setting("deisty_tag_actions" , deisty_tag_actions))
+                                                          
+                                                          
                                                       console.groupEnd()        
                                                   }                                      
                                                   console.deisty("hopefully I found where to input the pillow as a search ")   
                                               }
                                               else if(deisty_tag_properties[deisty_6_i].match(/b(u)?(t)?t(o)?n/gi)){  
                                                   if( deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step.length >= 1   ){
-
-                                                      console.log(deisty_tag_actions[deisty_site_url_counter].a)
-                                                      deisty_tag_actions[deisty_site_url_counter].a()
+                                                           
+                                                      eval(deisty_scope_setting("deisty_tag_actions",undefined,false)[4][deisty_site_url_counter].a)
+                                                      
                                                       console.log(deisty_tags[0])
 
                                                   }
@@ -256,24 +285,6 @@
                                                   console.log(deisty_tag_actions)
                                                   console.log(GM_getValue("deisty_tag_actions")) 
                                                   var alpha_sleep
-=======
-                                                  deisty_tags[deisty_iiiii].value = deisty_pillow[0];
-                                                  console.log([deisty_iiiii])
-                                                  console.log(deisty_tags[deisty_iiiii].value)
-                                                  console.log(document.querySelectorAll("body " + deisty_b))
-                                                  console.group("GM_change: deisty_tag_actions")
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0] = deisty_tags[deisty_iiiii]
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[0] = "grabbing_pillow_input_object"
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[1] = deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step[0].value = deisty_pillow[1]
-                                                      deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description[1] = "setting_pillow_to_grabbing_pillow_input_object "
-                                                      console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_step)
-                                                      console.log(deisty_tag_actions[deisty_site_url_counter].correct_webpage_action_description)
-                                                      var alpha_sleep
-                                                      GM_setValue("deisty_tag_actions",deisty_tag_actions)
-                                                      console.log(deisty_tag_actions)
-                                                      console.log(GM_getValue("deisty_tag_actions"))
-                                                  console.groupEnd()                                                  
->>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
                                                   break
                                               }
 
@@ -359,8 +370,8 @@
                         console.groupEnd()
 
                   }
-                  GM_getValue("deisty_sites") != deisty_sites ?  GM_setValue("deisty_sites",deisty_sites)  :null
-                  GM_getValue("deisty_sites_description") == null ?  GM_setValue("deisty_sites_description",deisty_sites_description)  :null
+                  GM_getValue("deisty_sites") != deisty_sites ?  deisty_scope_setting("deisty_sites",deisty_sites)  :null
+                  GM_getValue("deisty_sites_description") == null ?  deisty_scope_setting("deisty_sites_description",deisty_sites_description)  :null
                   for (var deisty_i in deisty_sites){
                     //   deisty_i handles indiviual sites in deisty sites
                     console.group("deisty correct format site handler")
@@ -508,7 +519,7 @@
                                                       })
                                         // nothing should be set to GM until deisty understand everything it needs from the site, different from GM
                                         // logging of the site theirselves
-                                        GM_setValue("deisty_requirements",deisty_requirements)
+                                        deisty_scope_setting("deisty_requirements",deisty_requirements)
                                         console.groupEnd()
                                     }
 
@@ -578,9 +589,7 @@
               console.group("site movement")
                   console.group("GM_change: deisty_dynamic")
                       deisty_dynamic = true
-                      GM_setValue("deisty_dynamic",deisty_dynamic)
-                      console.log(deisty_dynamic)
-                      console.log(GM_getValue("deisty_dynamic"))
+                      deisty_scope_setting("deisty_dynamic",deisty_dynamic)                                                                  
                   console.groupEnd()
                   console.deisty("am I at the right site")
                   console.log(deisty_sites[deisty_site_url_counter])
@@ -589,9 +598,7 @@
                   if((deisty_sites_description[deisty_site_url_counter].at_correct_site == false  || deisty_window_location_href.indexOf(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword) == -1 ) && deisty_sites_description[deisty_site_url_counter].looking == false  ){
                       console.group("GM_change: deisty_sites_description")
                           deisty_sites_description[deisty_site_url_counter].at_correct_site = true
-                          GM_setValue("deisty_sites_description",deisty_sites_description)
-                          console.log(deisty_sites_description)
-                          console.log(GM_getValue("deisty_sites_description"))
+                          console.log(deisty_scope_setting("deisty_sites_description",deisty_sites_description))                                                    
                           console.log(deisty_window_location_href.indexOf(      deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword                ))
                           console.log(deisty_sites_description[deisty_site_url_counter].at_correct_site_keyword)
                           console.log(deisty_window_location_href)
@@ -611,9 +618,7 @@
               console.deisty("also I am looking at this site we will not be switching sites anymore ")
               console.group("GM_change: deisty_sites_description")
                   deisty_sites_description[deisty_site_url_counter].looking = true
-                  GM_setValue("deisty_sites_description",deisty_sites_description)
-                  console.log(deisty_sites_description)
-                  console.log(GM_getValue("deisty_sites_description"))                  
+                  console.log(deisty_scope_setting("deisty_sites_description",deisty_sites_description))                                                      
               console.groupEnd()
 
               deisty_SITE_SEARCHER("INPUT","LIST",deisty_pillow)
@@ -644,7 +649,3 @@
 
 
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> bcb0bf8ba48af31f561bcb2b817f869100c702a0
